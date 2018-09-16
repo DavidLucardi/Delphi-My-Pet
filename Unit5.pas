@@ -1,0 +1,152 @@
+unit Unit5;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, sLabel, ExtCtrls, sPanel, DBGridEhGrouping,
+  ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, GridsEh, DBAxisGridsEh,
+  DBGridEh, Buttons, sBitBtn, sComboBox, sEdit, ComCtrls, DateUtils, DB,
+  ADODB, PrnDbgeh, sButton, Prvieweh, printers;
+
+type
+  TForm5 = class(TForm)
+    sPanel1: TsPanel;
+    sLabel1: TsLabel;
+    sPanel2: TsPanel;
+    sLabel3: TsLabel;
+    sLabel4: TsLabel;
+    sLabel5: TsLabel;
+    sLabel6: TsLabel;
+    sLabel7: TsLabel;
+    sLabel9: TsLabel;
+    sEdit2: TsEdit;
+    sEdit3: TsEdit;
+    sEdit4: TsEdit;
+    sBitBtn1: TsBitBtn;
+    sBitBtn3: TsBitBtn;
+    sEdit6: TsEdit;
+    sLabel8: TsLabel;
+    sLabel10: TsLabel;
+    DateTimePicker1: TDateTimePicker;
+    DateTimePicker2: TDateTimePicker;
+    sLabel2: TsLabel;
+    ADOQuery1: TADOQuery;
+    ADOTable1: TADOTable;
+    ADOConnection1: TADOConnection;
+    DataSource1: TDataSource;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    sLabel11: TsLabel;
+    sLabel12: TsLabel;
+    ADOTable1NamaPemilik: TWideStringField;
+    ADOTable1NamaHewan: TWideStringField;
+    ADOTable1JenisHewan: TWideStringField;
+    ADOTable1Makanan: TWideStringField;
+    ADOTable1Username: TWideStringField;
+    ADOTable1TotalTitip: TWideStringField;
+    DBGridEh1: TDBGridEh;
+    ADOTable1NoForm: TWideStringField;
+    PrintDBGridEh1: TPrintDBGridEh;
+    sBitBtn2: TsBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure sBitBtn3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure sBitBtn1Click(Sender: TObject);
+    procedure sEdit2Change(Sender: TObject);
+    procedure sButton1Click(Sender: TObject);
+    procedure sBitBtn2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form5: TForm5;
+
+implementation
+
+uses Unit1, Unit7;
+
+{$R *.dfm}
+
+procedure TForm5.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+Form1.sStatusBar1.Panels[2].Text := 'Ready';
+end;
+
+
+procedure TForm5.sBitBtn3Click(Sender: TObject);
+begin
+Form7.ShowModal;
+end;
+
+procedure TForm5.FormCreate(Sender: TObject);
+begin
+DateTimePicker2.Date := Now;
+end;
+
+
+procedure TForm5.sBitBtn1Click(Sender: TObject);
+begin
+Form5.ADOTable1.Append;
+Form5.ADOTable1['No Form'] := sEdit2.Text;
+Form5.ADOTable1['Nama Pemilik'] := sEdit3.Text;
+Form5.ADOTable1['Nama Hewan'] := sEdit4.Text;
+Form5.ADOTable1['Makanan'] := Edit2.Text;
+Form5.ADOTable1['Username'] := Form1.sStatusBar1.Panels[3].Text;
+Form5.ADOTable1['Total Titip'] := Edit4.Text;
+Form5.ADOTable1.Post;
+with Form5.ADOQuery1 do
+  begin
+    SQL.Clear;
+    SQL.Add('Select *');
+    SQL.Add('from Pengambilan');
+    Open;
+sEdit2.Text := '';
+sEdit3.Text := '';
+sEdit4.Text := '';
+Edit2.Text := '';
+Edit4.Text := '';
+sBitBtn2.Visible := True;
+end;
+  end;
+procedure TForm5.sEdit2Change(Sender: TObject);
+begin
+If sEdit2.Text <> '' then
+sBitBtn1.Enabled := True
+else
+sBitBtn1.Enabled := False;
+end;
+
+procedure TForm5.sButton1Click(Sender: TObject);
+begin
+Form5.ADOTable1.Delete;
+with Form5.ADOQuery1 do
+  begin
+    SQL.Clear;
+    SQL.Add('Select *');
+    SQL.Add('from Pengambilan');
+    Open;
+end;
+  end;
+procedure TForm5.sBitBtn2Click(Sender: TObject);
+begin
+printerpreview.Orientation:= poLandscape;
+printdbgrideh1.Preview;
+//Form5.ADOTable1.Delete;
+with Form5.ADOQuery1 do
+  begin
+    SQL.Clear;
+    SQL.Add('Select *');
+    SQL.Add('from Pengambilan');
+    Open;
+    sBitBtn2.Visible := False;
+end;
+  end;
+
+end.
